@@ -1,0 +1,54 @@
+/*
+ * Styles for the SearchProblems.jsx component
+ */
+
+.search-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 600px; /* Limit the width of the search bar */
+    margin: 20px 0;
+}
+
+.search-input-group {
+    display: flex;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden; /* Ensures borders/shadows are contained */
+}
+
+.search-input {
+    flex-grow: 1; /* Allows the input to take up most of the space */
+    padding: 15px 20px;
+    font-size: 16px;
+    border: none; /* Remove default border */
+    outline: none; /* Remove focus outline */
+}
+
+.search-button {
+    padding: 15px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #007bff; /* Primary brand color */
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.search-button:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+.search-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.search-tip {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #6c757d;
+}

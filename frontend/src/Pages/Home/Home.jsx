@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import SearchProblems from '../Components/SearchProblems'; // Assuming the component path
+import SearchProblems from "../../Components/SearchProblems";
 import './Home.css'; // You'll create this file for styling
 
 const HomePage = () => {
