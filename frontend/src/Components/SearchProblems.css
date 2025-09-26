@@ -52,3 +52,31 @@
     font-size: 14px;
     color: #6c757d;
 }
+
+/* Add to frontend/src/Components/SearchProblems.css */
+
+.search-input-group {
+    /* Ensure input group uses relative positioning for the button */
+    position: relative; 
+    /* ... existing styles ... */
+}
+
+/* Style the new clear button */
+.clear-button {
+    position: absolute;
+    right: 95px; /* Adjust based on your Search button width */
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: #999;
+    padding: 0 10px;
+    z-index: 2; /* Ensure it overlays the input */
+    line-height: 1; /* Fix vertical alignment */
+}
+
+.clear-button:hover {
+    color: #333;
+}

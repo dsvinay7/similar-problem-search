@@ -1,30 +1,43 @@
 import React, { useState } from 'react';
-import SearchProblems from "../../Components/SearchProblems";
-import './Home.css'; // You'll create this file for styling
+import SearchProblems from '../../Components/SearchProblems'; 
+import SearchResultCard from '../../Components/SearchResultCard'; 
+import './Home.css'; 
 
 const HomePage = () => {
     const [searchResults, setSearchResults] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // This function will be passed down to SearchProblems.jsx
     const handleSearch = async (query) => {
-        if (!query.trim()) return;
+        if (!query.trim()) {
+            setSearchResults([]);
+            localStorage.removeItem('last_search_attempt'); // Reset status if input is cleared
+            return;
+        }
 
         setLoading(true);
-        setSearchResults([]); // Clear previous results
+        setSearchResults([]);
 
         try {
-            // Placeholder: Replace with your actual API call using utils/http.js
-            const response = await fetch(`/api/problems/search?query=${encodeURIComponent(query)}`);
-            const data = await response.json();
-            
-            // Assuming the API returns an array of problem objects in data.problems
-            setSearchResults(data.problems || []);
+            // --- DATA MOCKING FOR FRONTEND ---
+            const MOCK_RESULTS = [
+                { _id: 1, title: "Longest Increasing Subsequence", description: "Find the length of the longest strictly increasing subsequence.", difficulty: "Hard", tags: ["DP", "Binary Search"] },
+                { _id: 2, title: "Maximum Subarray Sum", description: "Find the contiguous subarray which has the largest sum.", difficulty: "Medium", tags: ["DP", "Arrays"] },
+                { _id: 3, title: "Two Sum", description: "Return indices of two numbers that add up to a target.", difficulty: "Easy", tags: ["Arrays", "Hash Table"] },
+            ];
+
+            await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate loading time
+
+            const data = { problems: MOCK_RESULTS.filter(p => 
+                p.title.toLowerCase().includes(query.toLowerCase()) || 
+                p.description.toLowerCase().includes(query.toLowerCase())
+            )};
+
+            setSearchResults(data.problems);
+            localStorage.setItem('last_search_attempt', 'true'); 
 
         } catch (error) {
             console.error("Search failed:", error);
             setSearchResults([]);
-            // You might want to show an error message to the user here
         } finally {
             setLoading(false);
         }
@@ -32,17 +45,8 @@ const HomePage = () => {
 
     return (
         <div className="home-page-container">
-            {/* Header Section (Simple for now) */}
-            <header className="home-header">
-                <h1>Problem Solver AI</h1>
-                <nav>
-                    {/* Placeholder for navigation links */}
-                    <a href="#features">Features</a>
-                    <a href="/login">Login</a>
-                </nav>
-            </header>
+            {/* Header is rendered in App.jsx */}
 
-            {/* Hero Section */}
             <section className="hero-section">
                 <div className="hero-content">
                     <h1 className="main-title">Find Your Solution Faster.</h1>
@@ -50,7 +54,6 @@ const HomePage = () => {
                         Instantly search for similar problems, solutions, and concepts using **AI-powered keyword and semantic search.**
                     </p>
 
-                    {/* The Core Search Component */}
                     <div className="search-widget">
                         <SearchProblems 
                             onSearch={handleSearch} 
@@ -60,28 +63,33 @@ const HomePage = () => {
                     
                     {/* Display Results or Loading Status */}
                     <div className="search-results-display">
-                        {loading && <p>Searching...</p>}
+                        {loading && <p className="loading-message">Searching for similar problems...</p>}
                         
                         {!loading && searchResults.length > 0 && (
                             <div className="results-list">
                                 <h2>Found {searchResults.length} Similar Problems:</h2>
+                                
+                                {/* Uses the dedicated component for clean mapping */}
                                 {searchResults.map((problem) => (
-                                    <div key={problem._id} className="problem-card">
-                                        <h3>{problem.title}</h3>
-                                        <p>{problem.description.substring(0, 150)}...</p>
-                                    </div>
+                                    <SearchResultCard key={problem._id} problem={problem} />
                                 ))}
                             </div>
                         )}
                         
                         {!loading && searchResults.length === 0 && (
-                             <p className="no-results-text">Enter a query above to begin your intelligent search.</p>
+                            <p className="no-results-text">
+                                { /* Show failure message only after a search attempt */
+                                    (localStorage.getItem('last_search_attempt') && !loading) 
+                                        ? "Sorry, no similar problems were found matching your query."
+                                        : "Enter a query above to begin your intelligent search."
+                                }
+                            </p>
                         )}
                     </div>
                 </div>
             </section>
 
-            {/* Features Section */}
+            {/* Features Section (rest of the page is the same) */}
             <section id="features" className="features-section">
                 <h2>Why Use Problem Solver AI?</h2>
                 <div className="feature-cards">
